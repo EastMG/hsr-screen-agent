@@ -1,0 +1,19 @@
+# captures and runtime output never get committed
+shots/
+**/shots/
+*.png
+*.jpg
+*.jpeg
+*.bmp
+
+# run artifacts
+_run.log
+_done.txt
+ui-actions.log
+*.log
+
+# editor / OS noise
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
