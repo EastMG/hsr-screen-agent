@@ -17,7 +17,8 @@ param(
   [int]    $Pages  = 3,
   [int]    $Slots  = 9,
   [int]    $DragPx = 450,
-  [int]    $MaxChars = 18
+  [int]    $MaxChars = 18,
+  [string] $SeenFile = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -110,6 +111,15 @@ if (-not $script:win) {
   exit 3
 }
 Log ('window rect={0},{1} {2}x{3}' -f $script:win.X, $script:win.Y, $script:win.W, $script:win.H)
+
+$script:seen = @()
+if ($SeenFile -and (Test-Path -LiteralPath $SeenFile)) {
+  foreach ($line in Get-Content -LiteralPath $SeenFile) {
+    $s = $line.Trim()
+    if ($s) { $script:seen += ,([Convert]::FromBase64String($s)) }
+  }
+}
+Log ('seen masks loaded: {0}' -f $script:seen.Count)
 
 $script:files = 0
 
@@ -299,6 +309,11 @@ try {
         Start-Sleep -Milliseconds 600
         $mask = Get-NameMask
         $d = Mask-Dist $prevName $mask
+        if ($script:seen.Count -gt 0) {
+          $hit = $false
+          foreach ($sm in $script:seen) { if ((Mask-Dist $sm $mask) -lt 100) { $hit = $true; break } }
+          if ($hit) { Log ('ALREADY_SEEN p{0}s{1} off{2}' -f $pg, $s, $off); continue }
+        }
         if ($null -ne $prevName -and $d -lt 100) {
           Start-Sleep -Milliseconds 700
           $mask2 = Get-NameMask
@@ -323,7 +338,8 @@ try {
       Start-Sleep -Milliseconds 950
       Grab ('{0}-stats-top' -f $nn) | Out-Null
 
-      DragPanelUp 900 700 400
+      DragPanelUp 900 740 380
+      DragPanelUp 900 740 380
       Grab ('{0}-stats-bot' -f $nn) | Out-Null
       Send-Esc
       Start-Sleep -Milliseconds 350

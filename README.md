@@ -1,4 +1,4 @@
-# hsr-screen-agent
+﻿# hsr-screen-agent
 
 用 **截图 + 已验证的合成输入** 读取《崩坏：星穹铁道》角色面板数据的 PowerShell 工具集。
 不读游戏内存、不注入 DLL、不改游戏文件——它做的事情和你用鼠标点开角色面板、看一眼数字、记下来，完全一样，只是自动化了。
@@ -63,6 +63,7 @@ SETTLE round=4 diff=57      ← 才真正停稳
 | 抗惯性的角色名单枚举（含去重与重试） | `tools/hsr-enum.ps1` | 每个角色 1 张 PNG + 运行日志 |
 | 深度扫描：属性弹窗 + 六件遗器详情 | `tools/hsr-deepscan.ps1` | 每角色 9 张 PNG（详情/属性×2/遗器×6） |
 | 属性面板（触摸滚动）+ 星魂页 | `tools/hsr-statsdeep.ps1` | 每角色 4 张 PNG（详情/属性上/属性下/星魂） |
+| 从已有截图生成「已采角色」掩码清单 | `tools/hsr-make-seen.ps1` | seen.txt（配合 -SeenFile 跳过已采角色） |
 | 以管理员权限启动上述脚本 | `tools/run-elevated.ps1` | — |
 
 采到的 PNG 交给**人或视觉模型**去读（本工具只负责"把面板稳定地摆到镜头前"）。
